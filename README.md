@@ -13,7 +13,7 @@ This is an "advanced tutorial" in that any step that you already know how to do 
 We'll do an outside-in strategy where we build templates first and then controllers and then the models and migrations.
 
 1. Create a `/sign-up` and `/login` links in the navbar.
-2. Create the `/sign-up` route and template, and `/login` route and template.
+2. Create the `/sign-up` route and template, and `/login` route and template—put them in a new controller called `auth.js`.
 3. Make the sign up and login forms.
 4. Make the POST routes for `/sign-up` and `/login` paths and verify that when you submit the forms the route code runs.
 
@@ -83,11 +83,121 @@ To understand salting and hashing, watch this video that explains salting and ha
 
 ### Generate JWT 
 
-### Saving JWT as Cookie 
+Now we need to be able to generate a secure JWT (JSON Web Token) after someone one signs up or logs in. We'll use the `jsonwebtoken` library to handle JWT tokens. Be sure to install `jsonwebtoken` in your project with npm.
 
+Now add it to your `auth.js` controller and let's write a helper function that uses `jsonwebtoken` to create a JWT.
+
+```js
+// auth.js controller
+const jwt = require('jsonwebtoken');
+
+function generateJWT(user) {
+  const sbarJWT = jwt.sign({ id: user._id, currentOrgId: user.orgs[0]._id }, "AUTH-SECRET", { expiresIn: 60*60*24*60 });
+
+  return sbarJWT
+}
+```
+
+Now to create the JWT token after a user is created in your POST `/sign-up` route. We call it mpJWT for "make parties JWT"
+
+```js
+// after creating the user
+const mpJWT = generateJWT(user)
+```
+
+### Save JWT to Cookie 
+
+Now that we have our JWT token we need to attach it to the client by using a cookie.
+
+```js
+// after creating the user
+const mpJWT = generateJWT(user)
+
+// save as cookie
+res.cookie("mpJWT", mpJWT)
+
+// redirect to the root route
+res.redirect('/')
+```
+
+OMG your are technically logged in after you sign up now. But we won't have any functionality running off of this authentication yet, so let's get that working next before  tackling logging in.
+
+# Detecting if Someone is Logged in or Not
+
+We're going to use some middleware to check if a cookie is present with a valid JWT token. If it is we'll add a `req.user` object to the request, kind like we added `req.body` when form data was present! The presence of this `req.user` object means that someone is logged in, and we can use the `req.user.id` attribute to look up their user record.
+
+First install `express-jwt` and then initialize it in your initializations part of your `server.js` file. Then we'll use it in our middleware section.
+
+```js
+const jwtExpress = require('express-jwt');
+
+// ...
+// in your middleware inside your server.js file
+
+app.use(jwtExpress({
+    secret: "AUTH-SECRET,
+    credentialsRequired: true,
+    getToken: function fromHeaderOrQuerystring (req) {
+      if (req.cookies.sbarJWT) {
+        req.session.returnTo = null;
+        return req.cookies.sbarJWT;
+      }
+      return null;
+    }
+  }).unless({ path: ['/', '/login', '/sign-up'] })
+);
+```
+
+With this middleware above in place, if a valid JWT token is present in a cookie, then we will have a `req.user` object available in each controller route a logged  in user visits.
+
+Let's test this by logging our `req.user` to the console in the root route.
+
+```
+// in root route
+console.log(req.user)
+```
+
+We'll use the user's id from this `req.user` to look up the user's record in the future to do associations.
+
+# Creating a `currentUser` object 
+
+Let's go one step further and get a `currentUser` object in memory that we can reference anywhere in our application, including in our templates. This will allow us to make our views look different for people who are logged in.
+
+Let's add this custom middleware to your middleware in `server.js`.
+
+```js
+app.use(req, res, next => {
+  // if a valid JWT token is present
+  if (req.user) {
+    // Look up the user's record
+    User.findByPk(req.user.id, (currentUser) => {
+      // make the user object available in all controllers and templates
+      res.locals.currentUser = currentUser;
+    });
+  };
+});
+```
+
+`res.locals` is a neat way to make any data available across all controllers and even inside of all views! 
+
+# Changing the Views For Logged In Users 
+
+Once someone is logged in, they shouldn't see the Login and Sign Up links anymore. So let's wrap those in an if statement and only display them if the `currentUser` object is absent.
+
+```html
+{{#if currentUser}}
+<!-- login and sign up links -->
+{{/if}}
+```
+
+# Testing 
+
+So now when you are logged in (when a valid JWT is attached to a cookie in the client), you should not see the login and sign up links! Test your code manually and double check that it is working.
 
 
 # Logging In 
+
+Now that we have sign up working and we can drive 
 
 
 
