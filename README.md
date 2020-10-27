@@ -122,7 +122,7 @@ res.redirect('/')
 
 OMG your are technically logged in after you sign up now. But we won't have any functionality running off of this authentication yet, so let's get that working next before  tackling logging in.
 
-# Detecting if Someone is Logged in or Not
+# 5. Detecting if Someone is Logged in or Not
 
 We're going to use some middleware to check if a cookie is present with a valid JWT token. If it is we'll add a `req.user` object to the request, kind like we added `req.body` when form data was present! The presence of this `req.user` object means that someone is logged in, and we can use the `req.user.id` attribute to look up their user record.
 
@@ -159,7 +159,7 @@ console.log(req.user)
 
 We'll use the user's id from this `req.user` to look up the user's record in the future to do associations.
 
-# Creating a `currentUser` object 
+# 6. Creating a `currentUser` object 
 
 Let's go one step further and get a `currentUser` object in memory that we can reference anywhere in our application, including in our templates. This will allow us to make our views look different for people who are logged in.
 
@@ -180,7 +180,7 @@ app.use(req, res, next => {
 
 `res.locals` is a neat way to make any data available across all controllers and even inside of all views! 
 
-# Changing the Views For Logged In Users 
+# 7. Changing the Views For Logged In Users 
 
 Once someone is logged in, they shouldn't see the Login and Sign Up links anymore. So let's wrap those in an if statement and only display them if the `currentUser` object is absent.
 
@@ -190,18 +190,110 @@ Once someone is logged in, they shouldn't see the Login and Sign Up links anymor
 {{/if}}
 ```
 
-# Testing 
+# 8. Testing 
 
 So now when you are logged in (when a valid JWT is attached to a cookie in the client), you should not see the login and sign up links! Test your code manually and double check that it is working.
 
 
-# Logging In 
+# 9. Logging In 
 
-Now that we have sign up working and we can drive 
+Now that we have sign up working, lets make login work. Logging in is like signing up, but we don't create a new user record, we check to see if the passwords match. 
+
+First we have to add a `comparePassword` method to our `User` model.
+
+
+```js
+// user.js
+
+User.comparePassword = function(password, done) {
+  bcrypt.compare(password, this.password, function(err, isMatch) {
+    return done(err, isMatch);
+  });
+};
+
+```
+
+Now we have to add our `/login` POST route that will look up the user by their email address, compare their passwords, and create a JWT token if their password is correct. **This is a lot of code, so read each comment and each line so you know what is happening step by step.**
 
 
 
-# 5. Server-side Error Handling
+```js
+// auth.js 
+
+// LOGIN (POST)
+router.post('/login', (req, res, next) => {
+  // look up user with email
+  User.findOne({ email: req.body.email }).then(user => {
+    // compare passwords
+    user.comparePassword(req.body.password, function (err, isMatch) {
+      // if not match send back to login
+      if (!isMatch) {
+        return res.redirect('/login');
+      }
+      // if is match generate JWT
+      const mpJWT = generateJWT(user);
+      // save jwt as cookie
+      res.cookie("mpJWT", mpJWT)
+
+      res.redirect('/')
+    })
+    .catch(err => {
+      // if  can't find user return to login
+      console.log(err)
+      return res.redirect('/login');
+    });
+  });
+});
+```
+
+Test logging in.
+
+
+# 10. Logging Out 
+
+Logging out is probably the simplest thing in the world because all we have to do is delete the JWT cookie and whamo, a usser is logged out.
+
+```js
+// auth.js controller 
+
+// LOGOUT
+router.get('/logout', (req, res, next) => {
+  res.clearCookie('sbarJWT');
+
+  req.session.sessionFlash = { type: 'success', message: 'Successfully logged out!' }
+  return res.redirect('/');
+});
+```
+
+Try logging in and logging out a few times.
+
+# 11. Associating Resources with User
+
+Now the fun stuff. If we have a user resource, we'll want to associate things they make with their user record. Remember that so long as you are logged in you have the `req.user` object which has an `req.user.id` attribute. So if we wanted to associate parties with users, we could add a `UserId` column to our `parties` table and then when we create a party, make sure to assign the currentUser's id to the party's UserId attribute.
+
+```js
+// parties.js controller
+
+// create parties route 
+party.UserId = req.user.id;
+```
+
+Also you'll need to add a has many parties association to the `User` model and a belongs to user assocation to the `Party` model. 
+
+# 12. Associating RSVPs (challenge!)
+
+Associate users with their RSVPs. 
+
+# 13. Creating a User Profile (challenge!)
+
+Now we can use our associated parties to create a user profile that can have our parties and our rsvps. 
+
+Create GET request path at `/me` and load in the current user and their parties and rsvps.
+
+List out the parities they've created and their rsvped parties.
+
+
+# 14. Server-side Error Handling
 
 No app is really done if it doesn't handle errors elegantly. There is no one right way to handle errors, so we'll learn one way that is very minimalistic and looks pretty nice. 
 
@@ -261,7 +353,7 @@ req.session.sessionFlash = { type: 'success', message: 'You will be sent an emai
 req.session.sessionFlash = { type: 'warning', message: 'No account exists associated with that email. Please try again.' }
 ```
 
-### Test!
+# Test!
 
     
 
