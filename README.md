@@ -267,6 +267,7 @@ router.get('/logout', (req, res, next) => {
 
 Try logging in and logging out a few times.
 
+
 # 11. Associating Resources with User
 
 Now the fun stuff. If we have a user resource, we'll want to associate things they make with their user record. Remember that so long as you are logged in you have the `req.user` object which has an `req.user.id` attribute. So if we wanted to associate parties with users, we could add a `UserId` column to our `parties` table and then when we create a party, make sure to assign the currentUser's id to the party's UserId attribute.
@@ -280,6 +281,44 @@ party.UserId = req.user.id;
 
 Also you'll need to add a has many parties association to the `User` model and a belongs to user assocation to the `Party` model. 
 
+# More Permissions
+
+So now you can be logged in or logged out and we can know who owns 
+
+### Logged In User Permissions
+
+What do you want people to be able to do when logged in?
+
+Logged out users can:
+
+1. See events
+1. See Rsvps
+
+Logged in users can:
+
+1. Create events
+1. RSVP
+
+In order to protect these permissions use the same construction as above to only display buttons that you want visible to logged in people.
+
+```html
+{{#if currentUser}}
+<!-- buttons and links to various parts of the site -->
+{{/if}}
+```
+
+### Owners of Events (and Rsvps)
+
+Do you want to make it so only people who created an event can edit it? 
+
+Use a similar construction to see if someone owns an event (or an rsvp) to prevent non-owners from editing or deleting.
+
+```html
+{{#if event.userId = currentUser.id}}
+<!-- buttons and links to edit and delete -->
+{{/if}}
+```
+    
 # 12. Associating RSVPs (challenge!)
 
 Associate users with their RSVPs. 
@@ -291,6 +330,7 @@ Now we can use our associated parties to create a user profile that can have our
 Create GET request path at `/me` and load in the current user and their parties and rsvps.
 
 List out the parities they've created and their rsvped parties.
+
 
 
 # 14. Server-side Error Handling
@@ -355,7 +395,6 @@ req.session.sessionFlash = { type: 'warning', message: 'No account exists associ
 
 # Test!
 
-    
 
 
 
