@@ -13,7 +13,7 @@ This is an "advanced tutorial" in that any step that you already know how to do 
 We'll do an outside-in strategy where we build templates first and then controllers and then the models and migrations.
 
 1. Create a `/sign-up` and `/login` links in the navbar.
-2. Create the `/sign-up` route and template, and `/login` route and template—put them in a new controller called `auth.js`.
+2. Create the GET `/sign-up` route and template, and GET `/login` route and template—put them in a new controller called `auth.js`.
 3. Make the sign up and login forms.
 4. Make the POST routes for `/sign-up` and `/login` paths and verify that when you submit the forms the route code runs.
 
