@@ -321,11 +321,11 @@ Use a similar construction to see if someone owns an event (or an rsvp) to preve
 {{/if}}
 ```
     
-# 12. Associating RSVPs (challenge!)
+# 12. Associating RSVPs (Challenge!)
 
 Associate users with their RSVPs. 
 
-# 13. Creating a User Profile (challenge!)
+# 13. Creating a User Profile (Challenge!)
 
 Now we can use our associated parties to create a user profile that can have our parties and our rsvps. 
 
@@ -333,9 +333,12 @@ Create GET request path at `/me` and load in the current user and their parties 
 
 List out the parities they've created and their rsvped parties.
 
+# 14. Edit or Delete a User (Challenge!)
+
+Create a user-edit template to edit a user, and an update and destroy actions in your `auth.js` controller.
 
 
-# 14. Server-side Error Handling
+# 15. Server-side Error Handling
 
 No app is really done if it doesn't handle errors elegantly. There is no one right way to handle errors, so we'll learn one way that is very minimalistic and looks pretty nice. 
 
