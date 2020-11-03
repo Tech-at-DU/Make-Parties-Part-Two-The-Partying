@@ -92,9 +92,9 @@ Now add it to your `auth.js` controller and let's write a helper function that u
 const jwt = require('jsonwebtoken');
 
 function generateJWT(user) {
-  const sbarJWT = jwt.sign({ id: user._id, currentOrgId: user.orgs[0]._id }, "AUTH-SECRET", { expiresIn: 60*60*24*60 });
+  const mpJWT = jwt.sign({ id: user._id, currentOrgId: user.orgs[0]._id }, "AUTH-SECRET", { expiresIn: 60*60*24*60 });
 
-  return sbarJWT
+  return mpJWT
 }
 ```
 
@@ -138,9 +138,9 @@ app.use(jwtExpress({
     secret: "AUTH-SECRET,
     credentialsRequired: true,
     getToken: function fromHeaderOrQuerystring (req) {
-      if (req.cookies.sbarJWT) {
+      if (req.cookies.mpJWT) {
         req.session.returnTo = null;
-        return req.cookies.sbarJWT;
+        return req.cookies.mpJWT;
       }
       return null;
     }
@@ -260,7 +260,7 @@ Logging out is probably the simplest thing in the world because all we have to d
 
 // LOGOUT
 router.get('/logout', (req, res, next) => {
-  res.clearCookie('sbarJWT');
+  res.clearCookie('mpJWT');
 
   req.session.sessionFlash = { type: 'success', message: 'Successfully logged out!' }
   return res.redirect('/');
