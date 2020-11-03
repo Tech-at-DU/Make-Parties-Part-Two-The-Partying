@@ -187,6 +187,8 @@ Once someone is logged in, they shouldn't see the Login and Sign Up links anymor
 ```html
 {{#if currentUser}}
 <!-- login and sign up links -->
+{{else}}
+<!-- link to my profile '/me' -->
 {{/if}}
 ```
 
@@ -303,7 +305,7 @@ In order to protect these permissions use the same construction as above to only
 
 ```html
 {{#if currentUser}}
-<!-- buttons and links to various parts of the site -->
+<!-- Things to display if user is logged in -->
 {{/if}}
 ```
 
