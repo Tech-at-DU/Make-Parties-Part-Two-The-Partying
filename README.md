@@ -1,4 +1,4 @@
-# Make Parities Part-Two: The-Partying
+# Make Parties Part-Two: The-Partying
 
 This is a challenge that builds on top of the [Make Parties tutorial](https://www.makeschool.com/academy/track/make-tweets). Please complete that tutorial before beginning this one. 
 
