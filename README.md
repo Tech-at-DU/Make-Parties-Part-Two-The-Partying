@@ -57,7 +57,7 @@ In order to encrypt passwords when someone registers, we will use what is called
 1. Add a "beforeCreate" hook to your User model.
 
 ```js
-  User.hook('beforeCreate', async function(user) {
+  User.addHook('beforeCreate', async function(user) {
     const salt = await bcrypt.genSalt(10); //whatever number you want
     console.log(user);
     user.password = await bcrypt.hash(user.password, salt);
@@ -68,7 +68,7 @@ In order to encrypt passwords when someone registers, we will use what is called
 3. Let's now add the code to use bcrypt to intercept the password and encrypt it. To encrypt it we will be salting and then hashing the password.
 
 ```js
-  User.hook('beforeCreate', async function(user) {
+  User.addHook('beforeCreate', async function(user) {
     const salt = await bcrypt.genSalt(10); //whatever number you want
     console.log(user);
     user.password = await bcrypt.hash(user.password, salt);
