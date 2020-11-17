@@ -92,7 +92,7 @@ Now add it to your `auth.js` controller and let's write a helper function that u
 const jwt = require('jsonwebtoken');
 
 function generateJWT(user) {
-  const mpJWT = jwt.sign({ id: user._id, currentOrgId: user.orgs[0]._id }, "AUTH-SECRET", { expiresIn: 60*60*24*60 });
+  const mpJWT = jwt.sign({ id: user.id }, "AUTH-SECRET", { expiresIn: 60*60*24*60 });
 
   return mpJWT
 }
@@ -188,6 +188,7 @@ app.use(req, res, next => {
       res.locals.currentUser = currentUser;
     });
   };
+  next();
 });
 ```
 
