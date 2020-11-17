@@ -239,7 +239,7 @@ Now we have to add our `/login` POST route that will look up the user by their e
 // LOGIN (POST)
 router.post('/login', (req, res, next) => {
   // look up user with email
-  User.findOne({ email: req.body.email }).then(user => {
+  models.User.findOne({ where: { email: req.body.email } }).then(user => {
     // compare passwords
     user.comparePassword(req.body.password, function (err, isMatch) {
       // if not match send back to login
