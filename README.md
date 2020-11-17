@@ -221,7 +221,7 @@ First we have to add a `comparePassword` method to our `User` model.
 ```js
 // user.js
 
-User.comparePassword = function(password, done) {
+User.prototype.comparePassword = function(password, done) {
   bcrypt.compare(password, this.password, function(err, isMatch) {
     return done(err, isMatch);
   });
