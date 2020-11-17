@@ -183,12 +183,16 @@ app.use(req, res, next => {
   // if a valid JWT token is present
   if (req.user) {
     // Look up the user's record
-    models.User.findByPk(req.user.id, (currentUser) => {
+    models.User.findByPk(req.user.id).then(currentUser => {
       // make the user object available in all controllers and templates
       res.locals.currentUser = currentUser;
-    });
-  };
-  next();
+      next()
+    }).catch(err => {
+      console.log(err)
+    })
+  } else {    
+    next();
+  }
 });
 ```
 
