@@ -107,7 +107,21 @@ const mpJWT = generateJWT(user)
 
 ### Save JWT to Cookie 
 
-Now that we have our JWT token we need to attach it to the client by using a cookie.
+Now that we have our JWT token we need to attach it to the client by using a cookie. To use cookies we need to install the `cookie-parser` module with `npm install`. Then require it in your `app.js`
+
+```js
+// app.js
+
+// ...
+
+const cookieParser = require('cookie-parser');
+
+//...
+
+app.use(cookieParser());
+```
+
+Now we can use it to set and retrieve cookies from our `res` and `req` objects.
 
 ```js
 // after creating the user
