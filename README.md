@@ -153,7 +153,6 @@ app.use(jwtExpress({
     credentialsRequired: true,
     getToken: function fromHeaderOrQuerystring (req) {
       if (req.cookies.mpJWT) {
-        req.session.returnTo = null;
         return req.cookies.mpJWT;
       }
       return null;
