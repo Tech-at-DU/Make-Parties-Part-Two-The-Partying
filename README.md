@@ -140,7 +140,7 @@ OMG your are technically logged in after you sign up now. But we won't have any 
 
 We're going to use some middleware to check if a cookie is present with a valid JWT token. If it is we'll add a `req.user` object to the request, kind like we added `req.body` when form data was present! The presence of this `req.user` object means that someone is logged in, and we can use the `req.user.id` attribute to look up their user record.
 
-First install `express-jwt` and then initialize it in your initializations part of your `server.js` file. Then we'll use it in our middleware section.
+We're going to add our own custom middleware to check if a valid JWT token is present.
 
 ```js
 const jwtExpress = require('express-jwt');
@@ -148,17 +148,24 @@ const jwtExpress = require('express-jwt');
 // ...
 // in your middleware inside your server.js file
 
-app.use(jwtExpress({
-    secret: "AUTH-SECRET,
-    credentialsRequired: true,
-    getToken: function fromHeaderOrQuerystring (req) {
-      if (req.cookies.mpJWT) {
-        return req.cookies.mpJWT;
+app.use(function authenticateToken(req, res, next) {
+  // Gather the jwt access token from the cookie
+  const token = req.cookies.mpJWT;
+
+  if (token) {
+    jwt.verify(token, "AUTH-SECRET", (err, user) => {
+      console.log(err)
+      if (err) {
+        // redirect to login if not logged in and trying to access a protected route
+        res.redirect('/login')
       }
-      return null;
-    }
-  }).unless({ path: ['/', '/login', '/sign-up'] })
-);
+      req.user = user
+      next(); // pass the execution off to whatever request the client intended
+    })
+  } else {
+    next();
+  }
+});
 ```
 
 With this middleware above in place, if a valid JWT token is present in a cookie, then we will have a `req.user` object available in each controller route a logged  in user visits.
