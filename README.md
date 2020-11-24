@@ -143,9 +143,6 @@ We're going to use some middleware to check if a cookie is present with a valid 
 We're going to add our own custom middleware to check if a valid JWT token is present.
 
 ```js
-const jwtExpress = require('express-jwt');
-
-// ...
 // in your middleware inside your server.js file
 
 app.use(function authenticateToken(req, res, next) {
@@ -154,8 +151,8 @@ app.use(function authenticateToken(req, res, next) {
 
   if (token) {
     jwt.verify(token, "AUTH-SECRET", (err, user) => {
-      console.log(err)
       if (err) {
+        console.log(err)
         // redirect to login if not logged in and trying to access a protected route
         res.redirect('/login')
       }
