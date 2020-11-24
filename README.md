@@ -300,10 +300,10 @@ Try logging in and logging out a few times.
 Now the fun stuff. If we have a user resource, we'll want to associate things they make with their user record. Remember that so long as you are logged in you have the `req.user` object which has an `req.user.id` attribute. So if we wanted to associate parties with users, we could add a `UserId` column to our `parties` table and then when we create a party, make sure to assign the currentUser's id to the party's UserId attribute.
 
 ```js
-// parties.js controller
+// events.js controller
 
 // create parties route 
-party.UserId = req.user.id;
+event.UserId = req.user.id;
 ```
 
 Also you'll need to add a has many parties association to the `User` model and a belongs to user assocation to the `Party` model. 
