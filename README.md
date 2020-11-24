@@ -143,6 +143,9 @@ We're going to use some middleware to check if a cookie is present with a valid 
 We're going to add our own custom middleware to check if a valid JWT token is present.
 
 ```js
+
+const jwt = require('jsonwebtoken');
+
 // in your middleware inside your server.js file
 
 app.use(function authenticateToken(req, res, next) {
