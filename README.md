@@ -146,7 +146,7 @@ We're going to add our own custom middleware to check if a valid JWT token is pr
 
 const jwt = require('jsonwebtoken');
 
-// in your middleware inside your server.js file
+// in your middleware inside your app.js file
 
 app.use(function authenticateToken(req, res, next) {
   // Gather the jwt access token from the cookie
@@ -183,7 +183,7 @@ We'll use the user's id from this `req.user` to look up the user's record in the
 
 Let's go one step further and get a `currentUser` object in memory that we can reference anywhere in our application, including in our templates. This will allow us to make our views look different for people who are logged in.
 
-Let's add this custom middleware to your middleware in `server.js`.
+Let's add this custom middleware to your middleware in `app.js`.
 
 ```js
 app.use(req, res, next => {
