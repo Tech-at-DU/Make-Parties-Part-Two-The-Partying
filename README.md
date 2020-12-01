@@ -298,13 +298,27 @@ Try logging in and logging out a few times.
 
 # 11. Associating Resources with User
 
-Now the fun stuff. If we have a user resource, we'll want to associate things they make with their user record. Remember that so long as you are logged in you have the `req.user` object which has an `req.user.id` attribute. So if we wanted to associate events with users, we could add a `UserId` column to our `events` table and then when we create an event, make sure to assign the currentUser's id to the party's UserId attribute.
+Now the fun stuff. If we have a user resource, we'll want to associate things they make with their user record. Remember that so long as you are logged in you have the `req.user` object which has an `req.user.id` attribute. 
+
+We'll need to setup our hasMany and belongsTo in our models.
+
+```js
+// event.js
+Event.belongsTo(models.User);
+```
+
+```js
+// user.js
+User.hasMany(models.Event);
+```
+
+Then if we wanted to associate events with users, we could add a `UserId` column to our `events` table and then when we create an event, make sure to assign the currentUser's id to the event's `UserId` attribute.
 
 ```js
 // events.js controller
 
-// events#create route — add before creating the event
-req.body.UserId = req.user.id;
+// events#create route — after creating the event
+event.setUser(res.locals.currentUser)
 ```
 
 Also you'll need to add a `hasMany` events association to the `User` model and a belongs to user assocation to the `Event` model. 
@@ -342,7 +356,7 @@ Do you want to make it so only people who created an event can edit it?
 Use a similar construction to see if someone owns an event (or an rsvp) to prevent non-owners from editing or deleting.
 
 ```html
-{{#if event.userId = currentUser.id}}
+{{#if event.UserId = currentUser.id}}
 <!-- buttons and links to edit and delete -->
 {{/if}}
 ```
