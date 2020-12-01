@@ -298,16 +298,16 @@ Try logging in and logging out a few times.
 
 # 11. Associating Resources with User
 
-Now the fun stuff. If we have a user resource, we'll want to associate things they make with their user record. Remember that so long as you are logged in you have the `req.user` object which has an `req.user.id` attribute. So if we wanted to associate parties with users, we could add a `UserId` column to our `parties` table and then when we create a party, make sure to assign the currentUser's id to the party's UserId attribute.
+Now the fun stuff. If we have a user resource, we'll want to associate things they make with their user record. Remember that so long as you are logged in you have the `req.user` object which has an `req.user.id` attribute. So if we wanted to associate events with users, we could add a `UserId` column to our `events` table and then when we create an event, make sure to assign the currentUser's id to the party's UserId attribute.
 
 ```js
 // events.js controller
 
-// create parties route 
+// events#create route 
 event.UserId = req.user.id;
 ```
 
-Also you'll need to add a has many parties association to the `User` model and a belongs to user assocation to the `Party` model. 
+Also you'll need to add a `hasMany` events association to the `User` model and a belongs to user assocation to the `Event` model. 
 
 # More Permissions
 
@@ -353,11 +353,11 @@ Associate users with their RSVPs.
 
 # 13. Creating a User Profile (Challenge!)
 
-Now we can use our associated parties to create a user profile that can have our parties and our rsvps. 
+Now we can use our associated events to create a user profile that can have our events and our rsvps. 
 
-Create GET request path at `/me` and load in the current user and their parties and rsvps.
+Create GET request path at `/me` and load in the current user and their events and rsvps.
 
-List out the parities they've created and their rsvped parties.
+List out the parities they've created and their rsvped events.
 
 # 14. Edit or Delete a User (Challenge!)
 
