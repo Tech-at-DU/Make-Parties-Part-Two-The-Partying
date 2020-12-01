@@ -287,7 +287,8 @@ Logging out is probably the simplest thing in the world because all we have to d
 router.get('/logout', (req, res, next) => {
   res.clearCookie('mpJWT');
 
-  req.session.sessionFlash = { type: 'success', message: 'Successfully logged out!' }
+  // req.session.sessionFlash = { type: 'success', message: 'Successfully logged out!' }
+  // comment the above line in once you have error messaging setup (step 15 below)
   return res.redirect('/');
 });
 ```
