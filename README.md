@@ -303,8 +303,8 @@ Now the fun stuff. If we have a user resource, we'll want to associate things th
 ```js
 // events.js controller
 
-// events#create route 
-event.UserId = req.user.id;
+// events#create route — add before creating the event
+req.body.UserId = req.user.id;
 ```
 
 Also you'll need to add a `hasMany` events association to the `User` model and a belongs to user assocation to the `Event` model. 
