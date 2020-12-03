@@ -248,7 +248,7 @@ Now we have to add our `/login` POST route that will look up the user by their e
 // auth.js 
 
 // LOGIN (POST)
-router.post('/login', (req, res, next) => {
+app.post('/login', (req, res, next) => {
   // look up user with email
   models.User.findOne({ where: { email: req.body.email } }).then(user => {
     // compare passwords
