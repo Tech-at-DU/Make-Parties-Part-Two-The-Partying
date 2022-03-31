@@ -77,7 +77,7 @@ In order to encrypt passwords when someone registers, we will use what is called
 
 To understand salting and hashing, watch this video that explains salting and hashing and how to hack passwords.
 
-[Salting and Hashing](https://www.youtube.com/watch?v=--tnZMuoK3E)
+[![Salting and Hashing](https://img.youtube.com/vi/--tnZMuoK3E/maxresdefault.jpg)](https://www.youtube.com/watch?v=--tnZMuoK3E)
 
 # 4. Authenticating with JWT Token
 
