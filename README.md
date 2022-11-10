@@ -386,16 +386,17 @@ Error handling can be done on the front end (client-side) using JavaScript, but 
 
 ### Adding Sessions
 
-Install sessions and a cookie-parser using `npm i express-sessions cookie-parser`. Make sure to add a better secret.
+Install sessions and a cookie-parser using `npm i express-session cookie-parser`. Make sure to add a better secret.
 
 ```js
+const session = require('express-session');
+
 app.use(cookieParser("SECRET"));
 const expiryDate = new Date(Date.now() + 60 * 60 * 1000 * 24 * 60) // 60 days
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
   cookie: {expires: expiryDate },
-  store: sessionStore,
   resave: false
 }));
 
