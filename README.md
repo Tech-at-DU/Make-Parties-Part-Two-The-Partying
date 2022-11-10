@@ -395,7 +395,7 @@ app.use(cookieParser("SECRET"));
 const expiryDate = new Date(Date.now() + 60 * 60 * 1000 * 24 * 60) // 60 days
 
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: "SUPER_SECRET_SECRET",
   cookie: {expires: expiryDate },
   resave: false
 }));
