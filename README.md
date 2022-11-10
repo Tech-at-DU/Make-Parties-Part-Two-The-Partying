@@ -356,7 +356,7 @@ Do you want to make it so only people who created an event can edit it?
 Use a similar construction to see if someone owns an event (or an rsvp) to prevent non-owners from editing or deleting.
 
 ```html
-{{#if event.UserId = currentUser.id}}
+{{#if event.UserId == currentUser.id}}
 <!-- buttons and links to edit and delete -->
 {{/if}}
 ```
