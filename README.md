@@ -363,7 +363,7 @@ Use a similar construction to see if someone owns an event (or an rsvp) to preve
     
 # 12. Associating RSVPs (Challenge!)
 
-Associate users with their RSVPs. 
+Associate users with their RSVPs. Hint - [a many to many through pattern](https://ajbraus.github.io/sequelize-it/#/?id=associations-many-to-many)
 
 # 13. Creating a User Profile (Challenge!)
 
