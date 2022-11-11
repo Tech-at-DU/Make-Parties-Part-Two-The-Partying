@@ -355,8 +355,10 @@ Do you want to make it so only people who created an event can edit it?
 
 Use a similar construction to see if someone owns an event (or an rsvp) to prevent non-owners from editing or deleting.
 
+In Handlebars you will need to register a custom helper (here called `isEqual`) - [Helper code](https://stackoverflow.com/questions/34252817/handlebarsjs-check-if-a-string-is-equal-to-a-value) 
+
 ```html
-{{#if event.UserId == currentUser.id}}
+{{#if isEqual(event.UserId, currentUser.id) }}
 <!-- buttons and links to edit and delete -->
 {{/if}}
 ```
